@@ -1,0 +1,51 @@
+docker buildx build --platform linux/amd64 -t compareapi .
+
+
+(docker build -t compareapi .)
+
+
+docker run -d  --name compareapi -p 80:80 compareapi 
+
+set NAME="compareapi"
+
+
+az login (needed from cmd line)
+
+# then resource group is needed
+az group create --location centralind --name %NAME%
+
+
+# create azure container registry
+az acr create --resource-group %NAME% --name %NAME% --sku Basic
+
+Copy and paste loginServer value from above JSON:
+compareapi.azurecr.io
+
+# login to registry
+az acr login --resource-group %NAME% --name %NAME%
+
+# tag with docker
+docker tag compareapi compareapi.azurecr.io/compareapi
+
+# push docker api
+docker push compareapi.azurecr.io/compareapi
+
+# Run container on Azure
+# Run docker login azure to log Docker into Azure.
+
+docker login azure
+
+# Create an aci context with docker context create aci azure. Select the resource group to use with your context.
+docker context create aci azure
+
+# Run docker context ls to view your contexts.
+docker context ls
+
+# Switch context with docker context use azure
+docker context use azure
+
+# Run the container with docker run --name dlapi -p 80:80 -m 1.5G compareapi.azurecr.io/compareapi
+docker run --name compareapi -p 80:80 -m 1.5G compareapi.azurecr.io/compareapi
+
+# Run docker ps to get the URL of the container. You should be able to visit the URL shown to use the API.
+docker ps
