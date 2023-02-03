@@ -17,8 +17,8 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 # Copy the ./app directory inside the /code directory.
 COPY ./app /code/app
 
-ENV LISTEN_PORT=80
-EXPOSE 80
+ENV LISTEN_PORT=8040
+EXPOSE 8040
 
 # Set the command to run the uvicorn server.
 # CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "80"]
