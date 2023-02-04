@@ -63,3 +63,43 @@ docker rm compareapi
 
 # Delete the resource group
 az group delete --name %NAME% --no-wait
+
+
+
+# FOR AZURE CONTAINER HOSTING
+az login
+
+set resourceGroup="comparedemo"
+
+az group create -n %resourceGroup% -l centralindia
+
+set acrName="compareacr"
+
+# --admin-enabled flag if you want to be able to retrieve login credentials
+az acr create -g %resourceGroup% -n %acrName% --sku Basic --admin-enabled
+
+
+az acr build -r %acrName% -f .\Dockerfile -t comparewebapp:acr .
+
+# list all images in our ACR
+az acr repository list -n %acrName%
+
+# show the tags for the samplewebapp repository
+az acr repository show-tags -n %acrName% --repository comparewebapp
+
+# show details for the comparewebapp:acr image
+az acr repository show -n %acrName% -t comparewebapp:acr
+
+# n.b. prompts, showing you exactly what will be deleted. if you want to delete
+az acr repository delete -n %acrName% -t comparewebapp:acr
+
+# store password from below for further steps
+az acr credential show -n %acrName% --query "passwords[0].value"  -o tsv
+
+# example:ABCDEFFGH12345ABCDEDF This will be the output from previous screen for next --registry-password argument
+
+az container create -n comparewebapp -g %resourceGroup% --image compareacr.azurecr.io/comparewebapp:acr --registry-username %acrName% --registry-password ABCDEFFGH12345ABCDEDF --dns-name-label comparewebapp --ports 80 --memory 4
+
+
+# delete  container when done
+az container delete -n comparewebapp -g %resourceGroup% -y
