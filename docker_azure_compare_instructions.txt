@@ -6,13 +6,16 @@ docker buildx build --platform linux/amd64 -t compareapi .
 
 docker run -d  --name compareapi -p 80:80 compareapi 
 
+# if you want to check container state
+docker exec -t -i compareapi /bin/bash
+
 set NAME="compareapi"
 
 
 az login (needed from cmd line)
 
 # then resource group is needed
-az group create --location centralind --name %NAME%
+az group create --location centralindia --name %NAME%
 
 
 # create azure container registry
@@ -45,7 +48,18 @@ docker context ls
 docker context use azure
 
 # Run the container with docker run --name dlapi -p 80:80 -m 1.5G compareapi.azurecr.io/compareapi
-docker run --name compareapi -p 80:80 -m 1.5G compareapi.azurecr.io/compareapi
+docker run --name compareapi -p 80:80 -m 4G compareapi.azurecr.io/compareapi
 
 # Run docker ps to get the URL of the container. You should be able to visit the URL shown to use the API.
 docker ps
+
+
+# Remove container
+# Run docker stop 
+docker stop compareapi
+
+# Run docker rm
+docker rm compareapi
+
+# Delete the resource group
+az group delete --name %NAME% --no-wait
