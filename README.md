@@ -92,7 +92,7 @@ In linux rather than variable in between 2 %%, it is $.  This notation must be f
 10. (Optional) if you want to delete\
 `az acr repository delete -n %acrName% -t comparewebapp:acr`
 
-11. store password from below for further steps (you could also store this in a variable and use rather than copy paste. Much easier to do in linux compared to windows. For how to do this automation check this link: https://stackoverflow.com/a/48404829/19901788)\
+11. store password from below for further steps (you could also store this in a variable and use rather than copy paste. Much easier to do in linux compared to windows. For how to do this automation check this link: https://stackoverflow.com/a/48404829/19901788 ) \
 `az acr credential show -n %acrName% --query "passwords[0].value"  -o tsv`\
 example:ABCDEFFGH12345ABCDEDF This will be the output from previous screen for next --registry-password argument
 
