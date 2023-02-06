@@ -29,7 +29,8 @@ In linux rather than variable in between 2 %%, it is $.  This notation must be f
 `echo $NAME`
 6. Login to azure from your command line and follow on screen.\
 `az login`
-7. Create resource group.\
+7. Create resource group and azure container registry\
+`az group create --location centralindia --name %NAME%`\
 `az acr create --resource-group %NAME% --name %NAME% --sku Basic`
 8. Copy and paste loginServer value from above JSON (or you could write a command by getting value from az acr credentials and storing tsv output in a variable for future use)\
 `compareapi.azurecr.io`
